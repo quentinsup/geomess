@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="format-detection" content="telephone=yes" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+
+		<link rel="stylesheet" type="text/css" href="base/css/vendor/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="base/css/vendor/ui-lightness/jquery-ui-1.10.2.custom.min.css" />
+
+        <link rel="stylesheet" type="text/css" href="css/app.css" />
+
+    </head>
+    <body id="template">
+
+        <div id="header" class="text">
+            <h1 data-bind="text: app.title"></h1>
+        </div>
+
+        <div id="main">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div id="home" class="row-fluid" data-role="section">
+                        <div class="text">
+                            <h1>Bienvenue</h1>
+                        </div>
+                        <div class="ui-box text"  style="background: rgb(83, 153, 185); color: #fff;">
+                            GEOMess vous permet de laisser un message dans le cloud, qui ne sera visible qu'à l'endroit où vous laisser et rien qu'à cet endroit !
+                        </div>
+                        <a data-role="button" href="#letamess">Laisser un message</a>
+                    </div>
+                </div>
+                <div id="letamess" class="row-fluid" data-role="section">
+                    <div class="span12">
+                        <div class="text">
+                            <h1>Bienvenue</h1>
+                        </div>
+                        <form class="text">
+                            <textarea rows="10"></textarea>
+                            <a data-role="button" href="#home">Annuler</a>
+                            <a data-role="button">Laisser le message !</a>
+                        </form>
+                    </div>
+                    <div class="span12">
+                        <div class="text">
+                            <h1>Vos coordonnées</h1>
+                            <div class="row-fluid">
+                                <div class="span2">Latitude :</div>
+                                <div class="span10"><label data-bind="text: coords.latitude"></label></div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span2">Longitude :</div>
+                                <div class="span10"><label data-bind="text: coords.longitude"></label></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Require JS -->
+        <script type="text/javascript" src="base/js/vendor/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="base/js/vendor/jquery-ui-core.min.js"></script>
+        <script type="text/javascript" src="base/js/vendor/knockout.min.js"></script>
+        <script type="text/javascript" src="base/js/vendor/jquery-resize.min.js"></script>
+        <script type="text/javascript" src="base/js/vendor/jquery-hashchange.min.js"></script>
+
+        <script type="text/javascript" src="base/js/base.js"></script>
+
+        <script type="text/javascript">
+
+            // Run app
+        
+            (function() {
+
+                var watchId;
+
+                var view = {
+                    coords: { latitude: ko.observable('NA'), longitude: ko.observable('NA') },
+                    app: {
+                        title: ko.observable('GEOMESS')
+                    }
+                };
+
+                app.run(view);
+
+                location.hash = 'home';
+
+
+                var getCoords = function() {
+                    if(navigator.geolocation) {
+                        //navigator.geolocation.clearWatch(watchId);
+                        watchId = navigator.geolocation.getCurrentPosition(function(pos) {
+                            view.coords.latitude(pos.latitude);
+                            view.coords.longitude(pos.longitude);
+                        });
+                    }
+                };
+
+                getCoords();
+
+
+            })();
+
+        </script>
+    </body>
+</html>
